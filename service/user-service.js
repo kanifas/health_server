@@ -53,7 +53,8 @@ class UserService {
       throw ApiError.BadRequest(`Нет пользователя с почтовым адресом ${email}`);
     }
 
-    const isPasswordEquals = bcrypt.compare(password, user.password);
+    const isPasswordEquals = await bcrypt.compare(password, user.password);
+
     if (!isPasswordEquals) {
       throw ApiError.BadRequest('Неверный пароль')
     }
