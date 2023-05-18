@@ -10,8 +10,8 @@ class UserController {
         return next(ApiError.BadRequest('Ошибка валидации', errors.array()))
       }
 
-      const { email, password } = req.body;
-      const userData = await userService.signup(email, password);
+      // req.body: name, nickname, email, password, phone, location, speciality
+      const userData = await userService.signup({ ...req.body });
 
       // TODO: когда https то добавить флаг sequre
       res.cookie('refreshToken', userData.refreshToken, {
@@ -84,7 +84,7 @@ class UserController {
   
   async getUsers(req, res, next) {
     try {
-      const users = await userService.getUsers();
+      const users = await userService.fetchUsers();
       res.json(users);
     } catch (err) {
       next(err)
@@ -96,8 +96,19 @@ class UserController {
   //TODO: Обязательно удалить еще связанные токены!!!
   async deleteUser(req, res, next) {
     try {
-      const { email } = req.body;
-      const result = await userService.delete(email);
+      const { id } = req.body;
+      const result = await userService.deleteUser(id);
+      return res.json(result);
+    } catch (err) {
+      next(err)
+    }
+  }
+
+
+  async updateUser(req, res, next) {
+    const {id, ...rest} = req.body;
+    try {
+      const result = await userService.updateUser(id, rest);
       return res.json(result);
     } catch (err) {
       next(err)

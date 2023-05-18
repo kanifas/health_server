@@ -5,6 +5,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const router = require('./router/index');
 const errorMiddleware = require('./middlewares/error-middleware');
+const UserModel = require('./models/user-model');
 
 // // Установим подключение по умолчанию
 // mongoose.connect('mongodb://127.0.0.1/my_database');

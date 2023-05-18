@@ -1,33 +1,51 @@
 const bcrypt = require('bcrypt');
 const uuid = require('uuid');
 const UserModel = require('../models/user-model');
+const SpecialityModel = require('../models/speciality-model');
 const mailService = require('./mail.service');
 const tokenService = require('./token-service');
 const { ApiError } = require('./error.service');
 const UserDto = require('../dtos/user-dto');
 const { validationResult } = require('express-validator');
+const { roles } = require('../constants')
 
 class UserService {
-  async signup(email, password) {
+  async signup({name, nickname, email, password, phone, location, speciality, role = roles.USER}) {
+    const allUsers = await UserModel.find();
+
     const candidate = await UserModel.findOne({ email });
     if (candidate) {
       throw ApiError.BadRequest(`Пользователь с почтовым адресом ${email} уже существует`);
     }
 
+    const foundSpeciality = await SpecialityModel.findOne({ name: speciality });
+    let newSpeciality;
+    if (!foundSpeciality) {
+      newSpeciality = await SpecialityModel.create({ name: speciality })
+    }
+
+    console.log(newSpeciality);
+
     const hashedPassword = await bcrypt.hash(password, 5);
     const signupConfirmLink = uuid.v4();
 
     const user = await UserModel.create({
+      name,
+      nickname,
       email,
+      phone,
       password: hashedPassword,
       signupConfirmLink,
+      location,
+      speciality: newSpeciality,
+      role: allUsers.length === 0 ? roles.SUPER : role,
     });
 
     await mailService.sendConfirmationMail(
       email,
       `${process.env.API_URL}:${process.env.SERVER_PORT}/api/signup/confirm/${signupConfirmLink}`
     );
-
+    
     const userDto = new UserDto(user);
     const tokens = tokenService.generateTokens({...userDto});
 
@@ -74,29 +92,32 @@ class UserService {
   }
 
 
-  async getUsers() {
+  async fetchUsers() {
     const users = await UserModel.find();
-    return users
+    const normalizedUsers = users.map((u) => new UserDto(u))
+    return normalizedUsers
   }
 
 
-  async delete(email) {
-    const user = await UserModel.findOne({ email });
-
+  async deleteUser(id) {
+    const user = await UserModel.findById(id);
     if (!user) {
-      throw ApiError.BadRequest(`Такого пользователя (${email}) не существует`);
+      throw ApiError.BadRequest(`Такого пользователя нет`);
     }
 
-    const result = await UserModel.deleteOne({ email });
-    result.statusText = `Пользователь ${email} успешно удален`;
-    /*
-      {
-        acknowledged: true,
-        deletedCount: 1,
-        statusText: "Пользователь EMAIL успешно удален"
-      }
-    */
+    const result = await UserModel.findByIdAndDelete(id);
+    result.statusText = `Пользователь успешно удален`;
     return result
+  }
+  
+  
+  async updateUser(id, rest) {
+    const updateResult = await UserModel.findByIdAndUpdate(id, {...rest});
+
+    if (!updateResult) {
+      throw ApiError.BadRequest(`Пользователь не найден`);
+    }
+    return updateResult
   }
 
 
