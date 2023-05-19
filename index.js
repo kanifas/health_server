@@ -29,13 +29,14 @@ app.use('/api', router);
 app.use(errorMiddleware);
 
 const start = async () => {
-  const SERVER_PORT = process.env.SERVER_PORT || 5001;
+  const SERVER_PORT = process.env.SERVER_PORT || 5000;
 
   try {
     const connection = await mongoose.connect(process.env.DB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     })
+    // TODO: Создать базу, чтобы не было дефолтного названия
     
     app.listen(SERVER_PORT, () => console.log(`Server started on port ${SERVER_PORT}`))
   } catch (error) {
