@@ -4,7 +4,7 @@ const allowedOrigins = [
 ];
 
 const credentials = (req, res, next) => {
-  const origin = req.get('origin');
+  const origin = req.header('Origin');
   console.log(origin);
   if (allowedOrigins.includes(origin)) {
       res.set({
