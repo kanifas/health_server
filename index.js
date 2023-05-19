@@ -7,16 +7,6 @@ const router = require('./router/index');
 const errorMiddleware = require('./middlewares/error-middleware');
 const UserModel = require('./models/user-model');
 
-// // Установим подключение по умолчанию
-// mongoose.connect('mongodb://127.0.0.1/my_database');
-// // Позволим Mongoose использовать глобальную библиотеку промисов
-// mongoose.Promise = global.Promise;
-// // Получение подключения по умолчанию
-// var db = mongoose.connection;
-
-// Привязать подключение к событию ошибки  (получать сообщения об ошибках подключения)
-// db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
 const app = express();
 
 app.use(express.json());
