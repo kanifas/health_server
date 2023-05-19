@@ -18,13 +18,13 @@ class UserService {
       throw ApiError.BadRequest(`Пользователь с почтовым адресом ${email} уже существует`);
     }
 
-    const foundSpeciality = await SpecialityModel.findOne({ name: speciality });
-    let newSpeciality;
-    if (!foundSpeciality) {
-      newSpeciality = await SpecialityModel.create({ name: speciality })
-    }
+    // const foundSpeciality = await SpecialityModel.findOne({ name: speciality });
+    // let newSpeciality;
+    // if (!foundSpeciality) {
+    //   newSpeciality = await SpecialityModel.create({ name: speciality })
+    // }
 
-    console.log(newSpeciality);
+    // console.log(newSpeciality);
 
     const hashedPassword = await bcrypt.hash(password, 5);
     const signupConfirmLink = uuid.v4();

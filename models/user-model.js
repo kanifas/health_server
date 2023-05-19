@@ -17,7 +17,8 @@ const UserSchema = new Schema({
   
   photo: { type: String },
   
-  speciality: { type: ObjectId, ref: 'Speciality' },
+  //speciality: { type: ObjectId, ref: 'Speciality' },
+  speciality: { type: String },
 
   location: { type: String },
   
