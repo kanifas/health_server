@@ -37,7 +37,8 @@ class UserService {
       password: hashedPassword,
       signupConfirmLink,
       location,
-      speciality: newSpeciality,
+      //speciality: newSpeciality,
+      speciality,
       role: allUsers.length === 0 ? roles.SUPER : role,
     });
 
