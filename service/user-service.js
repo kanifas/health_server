@@ -6,11 +6,10 @@ const mailService = require('./mail.service');
 const tokenService = require('./token-service');
 const { ApiError } = require('./error.service');
 const UserDto = require('../dtos/user-dto');
-const { validationResult } = require('express-validator');
 const { roles } = require('../constants')
 
 class UserService {
-  async signup({name, nickname, email, password, phone, location, speciality, role = roles.USER}) {
+  async signup({name, email, password, phone, location, speciality, role = roles.USER}) {
     const allUsers = await UserModel.find();
 
     const candidate = await UserModel.findOne({ email });
@@ -31,7 +30,6 @@ class UserService {
 
     const user = await UserModel.create({
       name,
-      nickname,
       email,
       phone,
       password: hashedPassword,

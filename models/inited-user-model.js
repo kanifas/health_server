@@ -2,10 +2,8 @@ const { Schema, model } = require('mongoose');
 const { roles } = require('../constants');
 const { String, Boolean, Number, ObjectId } = Schema.Types;
 
-const UserSchema = new Schema({
+const InvitedUserSchema = new Schema({
   email: { type: String, unique: true, required: true },
-  
-  password: { type: String, required: true },
   
   role: { type: Number, required: true , default: roles.USER },
   
@@ -33,4 +31,4 @@ const UserSchema = new Schema({
   allowChangeAnotherCalendar: { type: Boolean, default: false },
 });
 
-module.exports = model('User', UserSchema);
+module.exports = model('InvitedUser', InvitedUserSchema);

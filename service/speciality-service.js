@@ -4,6 +4,7 @@ const SpecialityDto = require('../dtos/speciality-dto');
 
 class SpecialityService {
   async create(name) {
+    // const normalizedUsers;
     const candidate = await SpecialityModel.findOne({ name });
     if (candidate) {
       throw ApiError.BadRequest(`Специализация "${name}"" уже существует`);
