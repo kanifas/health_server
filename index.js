@@ -11,7 +11,6 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-
 app.use(cors({
   origin: [
     `${process.env.CLIENT_URL}:${process.env.CLIENT_PORT}`,
@@ -20,15 +19,11 @@ app.use(cors({
   ],
   credentials: true
 }));
-
-//app.use(cors());
-
+//app.use(credentialsMiddleware);
 // app.use(cors({
-//   credentials: true,
-//   origin: `${process.env.CLIENT_URL}:${process.env.CLIENT_PORT}`
+//    credentials: true,
+//    origin: `${process.env.CLIENT_URL}:${process.env.CLIENT_PORT}`
 // }));
-//app.use(credentialsMiddleware());
-
 app.use('/api', router);
 app.use(errorMiddleware);
 

@@ -1,6 +1,8 @@
 const { Schema, model } = require('mongoose');
 const { roles } = require('../constants');
-const { String, Boolean, Number, ObjectId } = Schema.Types;
+const { OccupationSchema } = require('./occupation-model');
+
+const { String, Boolean, Number, ObjectId, Array } = Schema.Types;
 
 const UserSchema = new Schema({
   email: { type: String, unique: true, required: true },
@@ -11,14 +13,20 @@ const UserSchema = new Schema({
   
   name: { type: String, required: true },
   
-  nickname: { type: String },
-  
   phone: { type: String, required: true },
   
   photo: { type: String },
   
-  //speciality: { type: ObjectId, ref: 'Speciality' },
-  speciality: { type: String },
+  occupation: {
+    type: [{type : ObjectId, ref: 'Occupation'}],
+    default: []
+  },
+  /*
+    User
+      .find()
+      .populate('occupation')
+      .exec(...)
+  */
 
   location: { type: String },
   

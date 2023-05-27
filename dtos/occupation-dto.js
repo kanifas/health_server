@@ -1,4 +1,4 @@
-module.exports = class SpecialityDto {
+module.exports = class OccupationDto {
   id;
   name;
 

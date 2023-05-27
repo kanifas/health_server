@@ -10,15 +10,12 @@ const {
   updateUser,
 } = require('../controllers/user-controller');
 const {
-  createSpeciality,
-  updateSpeciality,
-  deleteSpeciality,
-  getSpecialities,
-} = require('../controllers/speciality-controller');
-
+  createOccupation,
+  deleteOccupation,
+  getOccupations,
+} = require('../controllers/occupation-controller');
 const { body } = require('express-validator');
 const authMiddleware = require('../middlewares/auth-middleware');
-
 const router = new Router();
 
 router.post('/signup',
@@ -34,9 +31,8 @@ router.get('/signup/confirm/:link', signupConfirm);
 router.get('/refresh', refreshToken);
 router.get('/users', authMiddleware, getUsers);
 
-router.post('/speciality/create', authMiddleware, createSpeciality);
-router.post('/speciality/update', authMiddleware, updateSpeciality);
-router.post('/speciality/delete', authMiddleware, deleteSpeciality);
-router.get('/specialities', getSpecialities);
+router.post('/occupation/create', createOccupation);
+router.post('/occupation/delete', deleteOccupation);
+router.get('/occupations', getOccupations);
 
 module.exports = router;

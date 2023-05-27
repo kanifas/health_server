@@ -1,14 +1,14 @@
 const allowedOrigins = [
   `${process.env.CLIENT_URL}:${process.env.CLIENT_PORT}`,
+  'http://healthclient.onrender.com',
   'https://healthclient.onrender.com'
 ];
 
 const credentials = (req, res, next) => {
-  const origin = req.header('Origin');
-  console.log(origin);
+  const origin = req.get('Origin');
   if (allowedOrigins.includes(origin)) {
       res.set({
-          'Access-Control-Allow-Origin': origin, // ==> new header
+          'Access-Control-Allow-Origin': origin,
           'Access-Control-Allow-Credentials': true
       })
   }

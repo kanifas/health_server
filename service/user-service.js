@@ -1,16 +1,15 @@
 const bcrypt = require('bcrypt');
 const uuid = require('uuid');
 const UserModel = require('../models/user-model');
-const SpecialityModel = require('../models/speciality-model');
+const OccupationModel = require('../models/occupation-model');
 const mailService = require('./mail.service');
 const tokenService = require('./token-service');
 const { ApiError } = require('./error.service');
 const UserDto = require('../dtos/user-dto');
-const { validationResult } = require('express-validator');
 const { roles } = require('../constants')
 
 class UserService {
-  async signup({name, nickname, email, password, phone, location, speciality, role = roles.USER}) {
+  async signup({name, email, password, phone, location, occupation, role = roles.USER}) {
     const allUsers = await UserModel.find();
 
     const candidate = await UserModel.findOne({ email });
@@ -18,27 +17,26 @@ class UserService {
       throw ApiError.BadRequest(`Пользователь с почтовым адресом ${email} уже существует`);
     }
 
-    // const foundSpeciality = await SpecialityModel.findOne({ name: speciality });
-    // let newSpeciality;
-    // if (!foundSpeciality) {
-    //   newSpeciality = await SpecialityModel.create({ name: speciality })
+    // const foundOccupation = await OccupationModel.findOne({ name: occupation });
+    // let newOccupation;
+    // if (!foundOccupation) {
+    //   newOccupation = await OccupationModel.create({ name: occupation })
     // }
 
-    // console.log(newSpeciality);
+    // console.log(newOccupation);
 
     const hashedPassword = await bcrypt.hash(password, 5);
     const signupConfirmLink = uuid.v4();
 
     const user = await UserModel.create({
       name,
-      nickname,
       email,
       phone,
       password: hashedPassword,
       signupConfirmLink,
       location,
-      //speciality: newSpeciality,
-      speciality,
+      //occupation: newOccupation,
+      occupation,
       role: allUsers.length === 0 ? roles.SUPER : role,
     });
 
@@ -94,7 +92,7 @@ class UserService {
 
 
   async fetchUsers() {
-    const users = await UserModel.find();
+    const users = await UserModel.find().populate('occupation')
     const normalizedUsers = users.map((u) => new UserDto(u))
     return normalizedUsers
   }
