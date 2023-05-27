@@ -1,8 +1,8 @@
 const { Schema, model } = require('mongoose');
 const { String } = Schema.Types;
 
-const SpecialitySchema = new Schema({
+const OccupationSchema = new Schema({
   name: { type: String, required: true },
 });
 
-module.exports = model('Speciality', SpecialitySchema)
+module.exports = model('Occupation', OccupationSchema)

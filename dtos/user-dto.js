@@ -5,7 +5,7 @@ module.exports = class UserDto {
   phone;
   photo;
   role;
-  speciality;
+  occupation;
   location;
   settings;
   isEmailConfirmed;
@@ -18,7 +18,10 @@ module.exports = class UserDto {
     this.photo = model.photo;
     this.isEmailConfirmed = model.isEmailConfirmed;
     this.role = model.role;
-    this.speciality = model.speciality;
+    this.occupation = model.occupation.map(oc => ({
+      id: oc.id,
+      name: oc.name
+    }));
     this.location = model.location;
     this.settings = {
       slotSize: model.slotSize,

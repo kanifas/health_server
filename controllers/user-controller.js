@@ -10,7 +10,7 @@ class UserController {
         return next(ApiError.BadRequest('Ошибка валидации', errors.array()))
       }
 
-      // req.body: name, email, password, phone, location, speciality
+      // req.body: name, email, password, phone, location, occupation
       const userData = await userService.signup({ ...req.body });
 
       // TODO: когда https то добавить флаг sequre
